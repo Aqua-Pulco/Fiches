@@ -1,5 +1,5 @@
 
-## Mnémo-techniques (retenir sans forcer)
+## GIT Mnémo-techniques
 
 ### Dépôt (repo) = “valise + carnet”
 - Image : ton **projet = valise**, le **.git = carnet** à l’intérieur qui note tout.

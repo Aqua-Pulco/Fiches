@@ -1,4 +1,5 @@
-# Git — Fiche mémo expliquée (WSL/Ubuntu + GitHub/SSH)
+# Git — WSL/Ubuntu + GitHub/SSH
+conseil : aller au sujet avant la routine git pull AVANT DE CODER
 
 ## Sommaire
 1. Préambule & idées-clés
