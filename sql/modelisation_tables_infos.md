@@ -82,46 +82,9 @@ On met une FK **unique** d’un côté (ou on **fusionne** les tables si c’est
 
 ---
 
-## 4) Ta **carte appliquée** à ton schéma “resto”
+(Parent = côté 1, Enfant = côté N ; je précise où vit la FK)*
 
-*(Parent = côté 1, Enfant = côté N ; je précise où vit la FK)*
-
-* **clients (parent)** — **orders (enfant)**
-  FK : **`orders.client_id`** → `clients.id`.
-
-* **orders (parent)** — **order\_lines (enfant)**
-  FK : **`order_lines.order_id`** → `orders.id`.
-  👉 donc **pas** de `order_line_id` dans `orders`. Les lignes “s’accumulent” dans `order_lines`.
-
-* **plates (parent)** — **order\_lines (enfant)**
-  FK : **`order_lines.plate_id`** → `plates.id`.
-
-* **orders (parent)** — **order\_history (enfant)**
-  FK : **`order_history.order_id`** → `orders.id`.
-  👉 “plusieurs événements d’historique pour **une** commande”.
-
-* **orders** ↔ **plates** = **N\:N**, **réalisé** par **`order_lines`** (la jonction avec **deux** FKs).
-
-* **kitchen** (à placer selon le besoin)
-  – **État global par commande** : `orders (parent) — kitchen (enfant)` avec **`kitchen.order_id`**.
-  – **État par plat/ligne** : `order_lines (parent) — kitchen (enfant)` avec **`kitchen.order_line_id`**.
-  *(Tu n’en choisis qu’un.)*
-
----
-
-## 5) Types pour ton cas (vite, mais net)
-
-* **IDs / FKs** : même type des deux côtés (ex. `BIGINT` ↔ `BIGINT`).
-* **Quantité** : `INT`.
-* **Prix** : **choisis une seule convention** :
-  – soit **centimes** en `INT` (`unit_price_cents`, `line_total_cents`),
-  – soit **`DECIMAL(10,2)`** (`unit_price`, `line_total`).
-* **Emoji / URL d’image** : `TEXT`.
-* **Instants (créé/payé/délivré)** : un **timestamp** unique (UTC) plutôt que `date` + `time` séparés.
-
----
-
-## 6) La checklist qui évite 90 % des erreurs
+## 4) La checklist qui évite 90 % des erreurs
 
 * Trouve la **FK** → tu sais qui est **l’enfant (N)** et qui est **le parent (1)**.
 * **Le parent ne liste jamais ses enfants** : on **filtre** la table enfant sur la **FK**.
@@ -132,7 +95,7 @@ On met une FK **unique** d’un côté (ou on **fusionne** les tables si c’est
 
 ---
 
-## 7) Lecture “pas à pas” d’un lien (pour s’auto-vérifier)
+## 5) Lecture “pas à pas” d’un lien (pour s’auto-vérifier)
 
 1. Dis la phrase : “Pour **un** X, **combien** de Y ?”
 2. Si “plusieurs” → **1\:N**, la **FK** est chez **Y** (l’enfant).
@@ -141,7 +104,7 @@ On met une FK **unique** d’un côté (ou on **fusionne** les tables si c’est
 
 ---
 
-## 8) Ton schéma, vérifié avec la fiche (résumé)
+## 6) Ton schéma, vérifié avec la fiche pour traduction (cf adalicious ds repo : exercices_branche)
 
 * `clients 1 — N orders` ✅ FK `orders.client_id`.
 * `orders 1 — N order_lines` ✅ FK `order_lines.order_id`.
