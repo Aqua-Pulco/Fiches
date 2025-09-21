@@ -32,6 +32,12 @@ Parfait, voici ta **recette réutilisable** pour vérifier “c’est un nombre 
    Si C, F, (E), B sont **tous** vrais → tu peux utiliser `n` en confiance. Sinon, message d’erreur avec la valeur originale `h`.
 
 ---
+Number(h) : c’est une fonction de conversion. Elle prend quelque chose (string, booléen, etc.) et renvoie une valeur numérique (par ex. 42, 0, ou NaN). Point final. Elle ne “valide” rien, elle transforme.
+
+Number.isFinite(n) : c’est une fonction de test (un prédicat). Elle regarde la valeur numérique que tu as maintenant dans n et répond true/false selon qu’elle est finie (pas NaN, pas Infinity, pas -Infinity). Elle n’effectue aucune conversion supplémentaire.
+
+---
+
 
 ### Versions compactes (à coller partout)
 
