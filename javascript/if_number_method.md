@@ -1,4 +1,33 @@
-Parfait, voici ta **recette réutilisable** pour vérifier “c’est un nombre entier fini (≥ 0)” — en étapes simples que tu peux répéter sans réfléchir.
+### CONDITIONS regle de 'GARDE'
+
+donc, EN CONSITIONNEL: 
+
+  qd on verifie positif '&&' et qd on verifie en negatif c'est '||'
+
+
+
+## règle pratique :
+
+* **Vérif “positive” (tout est bon)** → on exige que **toutes** les conditions soient vraies
+  → utilise **`&&`**.
+  Exemple : `estFini && estEntier && n >= 0`.
+
+* **Vérif “négative” (au moins un problème)** → on sort si **une seule** condition échoue
+  → utilise **`||`** avec des négations.
+  Exemple : `!estFini || !estEntier || n < 0`.
+
+Ces deux formes sont **équivalentes** (lois de De Morgan) :
+
+```
+(estFini && estEntier && n >= 0)
+≡
+!( !estFini || !estEntier || n < 0 )
+```
+
+Astuce mémo :
+“**Tous feux verts → `&&`** ; **au moins un feu rouge → `||`**.”
+Et pour la lisibilité, n’hésite pas à mettre des parenthèses et à nommer clairement tes booléens (`estFini`, `estEntier`).
+
 
 ### La checklist “CFEB”
 
