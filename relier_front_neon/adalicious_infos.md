@@ -1,12 +1,9 @@
 
-# Fiche — Menu → Panier (localStorage) → Commande (API + DB)
-
-> Base commune à utiliser **par défaut**.  
-> Format : **Sommaire**, puis **Plan validé**, puis **Dictionnaire**.
+# Menu → Panier (lclStrg) → Commande (API + DB)
 
 ---
 
-## Sommaire — aperçu rapide (ordre + but)
+## Sommaire
 
 1) **Charger le menu (`GET /api/menu`)**  
    **Qu’est-ce qu’on fait ?** Le front réclame la liste des plats.  
@@ -29,21 +26,27 @@
    **Pourquoi ?** Enregistrer en BD, renvoyer `orderId`, vider le panier, afficher un statut de confirmation.
 
 **Où ça s’exécute / qui parle à qui ?**  
+
 - **Front (navigateur)** : affiche, gère le panier (`localStorage`), fait `fetch`.  
 - **Back (Express/Node)** : reçoit les requêtes `/api/...`, appelle la **DB**.  
 - **DB (Neon/PostgreSQL)** : stocke plats, clients, commandes.  
 - **Chaîne typique** : Front → Back (HTTP) → DB (SQL) → Back → Front (JSON).
 
-**Points d’attention (très concis)**  
+**Points d’attention**  
+
 - `GET /api/menu` → **200 OK** + JSON.  
 - `POST /api/clients` → **201 Created** + `{id, name}` ; **400** si `name` manquant.  
 - `POST /api/orders` → **201 Created** + `{id}` ; **400** si `items` vide ou `clientId` manquant.  
 - Côté front : `if (!response.ok) throw ...` + message clair.  
 - Panier : toujours **lire → modifier → écrire** (JSON).
 
----
+<br>
+<br>
+<br>
+<br>
+<br>
 
-## Plan validé — étapes détaillées + bouts de code “à trous”
+## étapes détaillées
 
 ### Étape 1 — Afficher le menu depuis la base
 
@@ -54,6 +57,7 @@
 **Quand ?** Au chargement de `menu.html`.
 
 **Back — connexion DB (Neon)** — `back/models/db.js`
+
 ```js
 // S'exécute sur le SERVEUR (Node)
 import { neon } from '@neondatabase/serverless';
@@ -89,6 +93,12 @@ export async function getMenu(req, res) {
 }
 ```
 
+<br>
+<br>
+<br>
+<br>
+<br>
+
 **Back — route** — `back/routes/menu.routes.js`
 
 ```js
@@ -117,6 +127,24 @@ app.use('/api/menu', menuRoutes);
 app.listen(process.env.PORT || 3000, () =>
   console.log('API http://localhost:3000'));
 ```
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 **Front — demander + afficher** — `front/js/menu-page.js`
 
@@ -161,7 +189,13 @@ function renderMenu(dishes) {
 })();
 ```
 
----
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 ### Étape 2 — “Commander” = ajouter au panier (`localStorage`)
 
@@ -201,9 +235,7 @@ document.addEventListener('click', (e) => {
   setTimeout(() => (btn.textContent = 'Commander'), 800);
 });
 ```
-
 *Astuce compteur (optionnel) :*
-
 ```js
 function cartCount() {
   return readCart().reduce((acc, l) => acc + l.qty, 0);
@@ -218,8 +250,6 @@ window.addEventListener('DOMContentLoaded', updateCartBadge);
 ---
 
 ### Étape 3 — Garantir un client (`POST /api/clients`) puis valider la commande (`POST /api/orders`)
-
-**Qu’est-ce qu’on fait ?**
 
 1. Obtenir un `clientId` en envoyant `{ name }` (depuis `localStorage.clientName`).
 2. Envoyer `{ clientId, items }` (dérivés du panier) pour créer l’**order** + ses lignes.
@@ -318,6 +348,9 @@ export async function createOrGetClientByName(name) {
   return existing[0] || null;
 }
 ```
+<br>
+<br>
+<br>
 
 `back/routes/orders.routes.js`
 
@@ -347,6 +380,26 @@ export async function postOrder(req, res) {
   }
 }
 ```
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 `back/models/orders.model.js`
 
@@ -404,19 +457,18 @@ app.listen(process.env.PORT || 3000, () =>
 
 ## Dictionnaire (mini-glossaire appliqué)
 
-* **payload** : le **corps** d’une requête HTTP (contenu envoyé), ex. `{ name: "Iris" }`.
-* **endpoint** : URL précise d’une API (ex. `/api/orders`).
-* **`fetch(url, options)`** : API du navigateur pour lancer des requêtes HTTP **asynchrones**.
-* **`response.ok`** : booléen `true` si le code HTTP est **2xx** (succès).
-* **`!`** : opérateur de **négation** logique (inverse un booléen).
-* **`response.status` / `response.statusText`** : code/texte HTTP (ex. `404`, `"Not Found"`).
-* **`response.json()`** : lit et décode la réponse en **objet JS**.
-* **`JSON.stringify(obj)`** : encode un objet JS en **texte JSON** (pour `body`).
-* **`try/catch`** : capture les erreurs (réseau ou `throw`).
-* **`throw new Error(msg)`** : propage une erreur avec **message**.
-* **CORS** : politique qui autorise (ou non) une **origine** front à appeler ton API.
-* **controller** : code back qui gère la requête (valide, appelle la DB, renvoie).
-* **model** : code back d’accès aux données (SQL vers la DB).
-* **localStorage** : stockage clé/valeur **persistant** dans le navigateur.
-* **status HTTP** : `200` OK, `201` Created, `400` Bad Request, `404` Not Found, `500` Internal Server Error.
-
+- **payload** : le **corps** d’une requête HTTP (contenu envoyé), ex. `{ name: "Iris" }`.
+- **endpoint** : URL précise d’une API (ex. `/api/orders`).
+- **`fetch(url, options)`** : API du navigateur pour lancer des requêtes HTTP **asynchrones**.
+- **`response.ok`** : booléen `true` si le code HTTP est **2xx** (succès).
+- **`!`** : opérateur de **négation** logique (inverse un booléen).
+- **`response.status` / `response.statusText`** : code/texte HTTP (ex. `404`, `"Not Found"`).
+- **`response.json()`** : lit et décode la réponse en **objet JS**.
+- **`JSON.stringify(obj)`** : encode un objet JS en **texte JSON** (pour `body`).
+- **`try/catch`** : capture les erreurs (réseau ou `throw`).
+- **`throw new Error(msg)`** : propage une erreur avec **message**.
+- **CORS** : politique qui autorise (ou non) une **origine** front à appeler ton API.
+- **controller** : code back qui gère la requête (valide, appelle la DB, renvoie).
+- **model** : code back d’accès aux données (SQL vers la DB).
+- **localStorage** : stockage clé/valeur **persistant** dans le navigateur.
+- **status HTTP** : `200` OK, `201` Created, `400` Bad Request, `404` Not Found, `500` Internal Server Error.
