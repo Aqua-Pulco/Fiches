@@ -1,5 +1,15 @@
+```bash
+git init
+git add -A
+git commit -m "init"
+git branch -M main
+git remote add origin git@github.com:Aqua-Pulco/NOM_DU_REPO.git
+git remote -v
+git push -u origin main
+```
+
 # Git — WSL/Ubuntu + GitHub/SSH
-conseil : aller au sujet avant la routine git pull AVANT DE CODER
+conseil : git pull AVANT DE CODER
 
 ## Sommaire
 1. Préambule & idées-clés
@@ -34,73 +44,46 @@ conseil : aller au sujet avant la routine git pull AVANT DE CODER
 ```bash
 git config --global user.name "Ton Nom"
 git config --global user.email "ton.email@exemple.com"
+```
+   Dit à Git qui signe les commits sur cette machine.
+   Pourquoi. Les commits sont horodatés et signés (auteur·rice, email).
+   Quand. Une seule fois après l’installation de Git (ou si tu changes d’email).
 
-Ce que ça fait. Dit à Git qui signe les commits sur cette machine.
-Pourquoi. Les commits sont horodatés et signés (auteur·rice, email).
-Quand. Une seule fois après l’installation de Git (ou si tu changes d’email).
-2.2 Clés SSH GitHub
-
+### 2.2 Clés SSH GitHub
+```bash
 ssh-keygen -t ed25519 -C "ton.email@exemple.com"
 eval "$(ssh-agent -s)"
 ssh-add ~/.ssh/id_ed25519
 cat ~/.ssh/id_ed25519.pub | clip.exe
-# → GitHub > Settings > SSH and GPG keys > New SSH key > coller la clé
+```
 
-Ce que ça fait.
+### → GitHub > Settings > SSH and GPG keys > New SSH key > coller la clé
 
-    ssh-keygen … ed25519 crée une paire de clés (privée + publique) moderne, courte et sûre.
+ ***ssh-keygen*** … ed25519* crée une paire de clés (privée + publique) moderne, courte et sûre.<br>
+ ***ssh-agent*** démarre le gestionnaire de clés en mémoire.<br>
+ ***ssh-add*** y charge ta clé privée (évite d’avoir à la retaper).<br>
+ ***clip.exe*** copie ta clé publique dans le presse-papier Windows pour la coller dans GitHub.<br>
 
-    ssh-agent démarre le gestionnaire de clés en mémoire.
+Pourquoi<br>L’authentification SSH évite les mots de passe/tokens à répétition, surtout pour push.<br>
+Quand<br> Une fois par machine (ou si tu régénères une clé).<br>
 
-    ssh-add y charge ta clé privée (évite d’avoir à la retaper).
-
-    clip.exe copie ta clé publique dans le presse-papier Windows pour la coller dans GitHub.
-
-Pourquoi. L’authentification SSH évite les mots de passe/tokens à répétition, surtout pour push.
-Quand. Une fois par machine (ou si tu régénères une clé).
-2.3 Tester l’accès SSH à GitHub
+### 2.3 Tester l’accès SSH à GitHub
 
 ssh -T git@github.com
 
-Ce que ça fait. Ouvre une session SSH “à blanc” vers GitHub pour vérifier que ta clé est reconnue.
-Attendu. « Hi TON_PSEUDO! You’ve successfully authenticated, but GitHub does not provide shell access. »
-Pourquoi. Tu sais avant de cloner/pusher que l’auth est OK.
-Mnémo. -T = “no TTY” (test silencieux).
-2.4 Réglages globaux utiles (posés une fois)
+Ouvre une session SSH “à blanc” vers GitHub pour vérifier que ta clé est reconnue.<br>
+Attendu. « Hi TON_PSEUDO! You’ve successfully authenticated, but GitHub does not provide shell access. »<br>
+Pourquoi<br> Tu sais avant de cloner/pusher que l’auth est OK.<br>
 
+
+### 2.4 Réglages globaux utiles (posés une fois)
+```bash
 git config --global pull.ff only
 git config --global push.autoSetupRemote true
+```
+fast-forward a expliquer plus tard
 
-pull.ff only — explication didactique
-
-    Ce que ça fait. Oblige git pull à avancer la branche uniquement si l’opération peut se faire en fast-forward (FF) sans créer un commit de merge automatique.
-
-    Pourquoi c’est utile.
-
-        Évite les commits parasites du style “Merge branch 'origin/main'…” créés par surprise lors d’un pull.
-
-        Si ta branche a divergé (toi + quelqu’un d’autre avez committé chacun de votre côté), Git refuse de fusionner tout seul et te le dit clairement.
-
-    Ce que ça implique. En cas de divergence, tu choisis consciemment la stratégie (souvent git pull --rebase), au lieu de subir un merge automatique.
-
-    Image mentale. Fast-forward = rembobiner la tête de lecture vers l’avant, sans brancher d’autre piste. Pas de “nœud” dans l’historique.
-
-push.autoSetupRemote true — explication didactique
-
-    Ce que ça fait. Au premier git push d’une nouvelle branche locale, Git configure automatiquement l’upstream (le lien “cette branche locale suit telle branche distante”).
-
-    Pourquoi c’est utile. Tu évites le message « no upstream branch » et la corvée de faire git push -u origin ma-branche la première fois.
-
-    Définition d’upstream. La branche distante de référence que suit ta branche locale (ex. main suit origin/main). Ce lien permet à git pull/git push sans arguments de savoir où tirer/pousser.
-
-    Effet concret. Tu peux faire git push tout de suite après avoir créé une nouvelle branche locale, sans te poser de question.
-
-Vérifier (optionnel).
-
-git config --global -l | grep -E 'pull.ff|push.autoSetupRemote'
-# attendu : pull.ff=only  et  push.autoSetupRemote=true
-
-3) Cloner un dépôt existant (propre)
+## 3) Cloner un dépôt existant (propre)
 
 cd ~/ada
 git clone git@github.com:Aqua-Pulco/NOM_DU_REPO.git
@@ -111,7 +94,8 @@ git branch -vv
 
 Pourquoi. Le clone ramène le dossier .git (historique + lien GitHub). Un ZIP ne le fait pas.
 À vérifier. remote -v (URL SSH), status (propre), branch -vv (suivi origin/... OK).
-4) Créer un nouveau projet local → premier push vers GitHub
+
+## 4) Créer un nouveau projet local → premier push vers GitHub
 
 cd /chemin/vers/mon-projet
 git init
@@ -220,5 +204,6 @@ Traductions rapides.
     Fast-forward. Avancer la branche sans créer de commit de merge.
 
     Upstream. Branche distante de référence suivie par ta branche locale (ex. origin/main).
+
 
     Rebase. Rejouer tes commits par-dessus une base plus récente pour garder un fil droit.
