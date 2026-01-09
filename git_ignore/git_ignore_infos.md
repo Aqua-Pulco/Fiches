@@ -1,29 +1,6 @@
 
 Si `.env` a été poussé une fois, **change** les mots de passe/tokens exposés (ex: reset sur Neon).
 
-**Contenu minimal à coller :**
-
-```
-# secrets
-.env
-
-# dépendances
-node_modules/
-
-# builds (si ils existent)
-dist/
-build/
-```
-## Si tu as DÉJÀ pushé des trucs (ex: node\_modules, .env)
-
-```bash
-git rm -r --cached node_modules   # retire node_modules de l'index (pas du disque)
-git rm --cached .env              # retire .env de l'index
-git commit -m "chore: stop tracking node_modules and .env"
-git push
-```
-
-
 Un motif simple comme
 `node_modules`
 veut dire : ignore **tout fichier ou dossier nommé `node_modules`**, n’importe où dans le projet.
@@ -57,4 +34,26 @@ Si un fichier est déjà “tracké”, Git continuera de le suivre même si tu 
 
 `git rm` = enlever le fichier de Git et du disque.
 `git rm --cached` = enlever le fichier de Git seulement, mais le laisser sur ton disque.
+
+**Contenu minimal à coller :**
+
+```
+# secrets
+.env
+
+# dépendances
+node_modules/
+
+# builds (si ils existent)
+dist/
+build/
+```
+## Si tu as DÉJÀ pushé des trucs (ex: node\_modules, .env)
+
+```bash
+git rm -r --cached node_modules   # retire node_modules de l'index (pas du disque)
+git rm --cached .env              # retire .env de l'index
+git commit -m "chore: stop tracking node_modules and .env"
+git push
+```
 
